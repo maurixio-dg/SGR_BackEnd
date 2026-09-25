@@ -1,0 +1,53 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}SGR | Municipalidad de La Serena{% endblock %}</title>
+    <link rel="stylesheet"
+      href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+    
+</head>
+
+<body>
+
+    <header class="encabezado">
+        <div class="contenedor">
+            <div>
+                <h1>SGR</h1>
+                <p>Sistema de Gestión de Resultados</p>
+            </div>
+
+            <div class="institucion">
+                Delegaciones Municipales · La Serena
+            </div>
+        </div>
+    </header>
+
+    <nav class="navbar">
+        <div class="contenedor navegacion">
+            <a href="{% url 'inicio' %}">
+    Inicio
+</a>
+            <a href="/funcionarios/">Funcionarios</a>
+            <a href="/actividades/">Actividades</a>
+        </div>
+    </nav>
+
+    <main class="contenido">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="footer">
+        <p>Sistema de Gestión de Resultados</p>
+        <p>Municipalidad de La Serena · 2026</p>
+    </footer>
+  <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  
+</body>
+</html>

@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}
+SGR | Funcionarios registrados
+{% endblock %}
+
+{% block content %}
+
+<div class="tarjeta">
+
+    <h2>Funcionarios registrados</h2>
+
+    <p class="descripcion">
+        Funcionarios asociados a las Delegaciones Municipales.
+    </p>
+
+    <div class="tabla-contenedor">
+
+        <table class="tabla">
+
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Funcionario</th>
+                    <th>Cargo</th>
+                    <th>Delegación</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for funcionario in funcionarios %}
+
+                <tr>
+                    <td>{{ funcionario.id }}</td>
+                    <td>{{ funcionario.nombre }}</td>
+                    <td>{{ funcionario.cargo }}</td>
+                    <td>{{ funcionario.delegacion }}</td>
+
+                    <td>
+                        {% if funcionario.estado == "Activo" %}
+                            <span class="estado activo">Activo</span>
+                        {% else %}
+                            <span class="estado inactivo">Inactivo</span>
+                        {% endif %}
+                    </td>
+                </tr>
+
+                {% empty %}
+
+                <tr>
+                    <td colspan="5">
+                        No existen funcionarios registrados.
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

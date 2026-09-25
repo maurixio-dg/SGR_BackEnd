@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+SGR | Funcionarios
+{% endblock %}
+
+{% block content %}
+
+<div class="tarjeta shadow-sm">
+
+    <div class="row align-items-center g-4">
+
+        <div class="col-md-7">
+
+            <h2>Módulo de Funcionarios</h2>
+
+            <p>
+                Consulta y gestión de los funcionarios asociados
+                a las Delegaciones Municipales.
+            </p>
+
+            <a class="btn btn-municipal"
+               href="{% url 'listar_funcionarios' %}">
+                Ver funcionarios
+            </a>
+
+        </div>
+
+        <div class="col-md-5">
+
+            <img
+                src="{% static 'img/funcionarios.jpg' %}"
+                class="img-fluid rounded imagen-modulo"
+                alt="Funcionarios de las Delegaciones Municipales">
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

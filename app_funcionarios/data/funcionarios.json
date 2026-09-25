@@ -1,0 +1,30 @@
+[
+    {
+        "id": 1,
+        "nombre": "Carlos Muñoz",
+        "cargo": "Gestor Social",
+        "delegacion": "Delegación Rural",
+        "estado": "Activo"
+    },
+    {
+        "id": 2,
+        "nombre": "Valentina Rojas",
+        "cargo": "Apoyo Administrativo",
+        "delegacion": "Delegación Rural",
+        "estado": "Activo"
+    },
+    {
+        "id": 3,
+        "nombre": "Sebastián Vega",
+        "cargo": "Gestor Territorial",
+        "delegacion": "Delegación Norte",
+        "estado": "Activo"
+    },
+    {
+        "id": 4,
+        "nombre": "Camila Soto",
+        "cargo": "Coordinadora",
+        "delegacion": "Delegación Norte",
+        "estado": "Inactivo"
+    }
+]

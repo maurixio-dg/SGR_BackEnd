@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+SGR | Actividades
+{% endblock %}
+
+{% block content %}
+
+<div class="tarjeta shadow-sm">
+
+    <div class="row align-items-center g-4">
+
+        <div class="col-md-7">
+
+            <h2>Módulo de Actividades</h2>
+
+            <p>
+                Registro y seguimiento de las actividades realizadas
+                por los funcionarios de las Delegaciones Municipales.
+            </p>
+
+            <a class="btn btn-municipal"
+               href="{% url 'listar_actividades' %}">
+                Ver actividades
+            </a>
+
+        </div>
+
+        <div class="col-md-5">
+
+            <img
+                src="{% static 'img/actividades.jpg' %}"
+                class="img-fluid rounded imagen-modulo"
+                alt="Actividades de las Delegaciones Municipales">
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

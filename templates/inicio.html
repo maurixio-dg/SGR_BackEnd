@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block title %}
+SGR | Inicio
+{% endblock %}
+
+
+{% block content %}
+
+<section class="mb-5">
+
+    <div class="p-5 bg-white rounded shadow-sm">
+
+        <span class="badge bg-secondary mb-3">
+            Delegaciones Municipales
+        </span>
+
+        <h1 class="titulo-principal">
+            Sistema de Gestión de Resultados
+        </h1>
+
+        <p class="lead mt-3">
+            Plataforma para apoyar el registro, seguimiento
+            y consulta de la gestión realizada por los
+            funcionarios de las Delegaciones Municipales.
+        </p>
+
+        <div class="mt-4">
+
+            <a href="{% url 'inicio_funcionarios' %}"
+               class="btn btn-municipal me-2">
+                Funcionarios
+            </a>
+
+            <a href="{% url 'inicio_actividades' %}"
+               class="btn btn-outline-secondary">
+                Actividades
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section>
+
+    <h2 class="mb-4">
+        Módulos del sistema
+    </h2>
+
+    <div class="row g-4">
+
+        <div class="col-md-6">
+
+            <div class="card h-100 shadow-sm">
+
+                <div class="card-body">
+
+                    <h3 class="card-title h5">
+                        Funcionarios
+                    </h3>
+
+                    <p class="card-text">
+                        Consulta información de los funcionarios
+                        asociados a las Delegaciones Municipales.
+                    </p>
+
+                    <a href="{% url 'listar_funcionarios' %}"
+                       class="btn btn-municipal">
+                        Ver funcionarios
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-6">
+
+            <div class="card h-100 shadow-sm">
+
+                <div class="card-body">
+
+                    <h3 class="card-title h5">
+                        Actividades
+                    </h3>
+
+                    <p class="card-text">
+                        Revisa las actividades registradas
+                        y su estado de validación.
+                    </p>
+
+                    <a href="{% url 'listar_actividades' %}"
+                       class="btn btn-municipal">
+                        Ver actividades
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

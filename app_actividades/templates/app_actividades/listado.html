@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block title %}
+SGR | Actividades registradas
+{% endblock %}
+
+{% block content %}
+
+<div class="tarjeta">
+
+    <h2>Actividades registradas</h2>
+
+    <p class="descripcion">
+        Seguimiento de actividades realizadas por los funcionarios
+        de las Delegaciones Municipales.
+    </p>
+
+    <div class="tabla-contenedor">
+
+        <table class="tabla">
+
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Fecha</th>
+                    <th>Funcionario</th>
+                    <th>Actividad</th>
+                    <th>Tipo</th>
+                    <th>Estado</th>
+                    <th>Evidencia</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for actividad in actividades %}
+
+                <tr>
+                    <td>{{ actividad.id }}</td>
+                    <td>{{ actividad.fecha }}</td>
+                    <td>{{ actividad.funcionario }}</td>
+                    <td>{{ actividad.actividad }}</td>
+                    <td>{{ actividad.tipo }}</td>
+
+                    <td>
+                        {% if actividad.estado == "Validada" %}
+                            <span class="estado activo">
+                                Validada
+                            </span>
+                        {% else %}
+                            <span class="estado pendiente">
+                                Pendiente
+                            </span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {{ actividad.evidencia }}
+                    </td>
+                </tr>
+
+                {% empty %}
+
+                <tr>
+                    <td colspan="7">
+                        No existen actividades registradas.
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

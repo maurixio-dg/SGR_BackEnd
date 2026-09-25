@@ -1,0 +1,220 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f4f5f7;
+    color: #292929;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.contenedor {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+}
+
+/* ENCABEZADO */
+
+.encabezado {
+    background-color: #8b2929;
+    color: white;
+    padding: 24px 0;
+}
+
+.encabezado .contenedor {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.encabezado h1 {
+    font-size: 36px;
+    margin-bottom: 3px;
+}
+
+.encabezado p {
+    font-size: 15px;
+}
+
+.institucion {
+    font-weight: bold;
+}
+
+/* NAVEGACIÓN */
+
+.navbar {
+    background-color: #ffffff;
+    border-bottom: 1px solid #dddddd;
+}
+
+.navegacion {
+    display: flex;
+    gap: 10px;
+}
+
+.navegacion a {
+    display: block;
+    padding: 16px 20px;
+    text-decoration: none;
+    color: #333333;
+    font-weight: bold;
+}
+
+.navegacion a:hover {
+    background-color: #8b2929;
+    color: white;
+}
+
+/* CONTENIDO */
+
+.contenido {
+    width: 90%;
+    max-width: 1200px;
+    margin: 35px auto;
+    flex: 1;
+}
+
+.tarjeta {
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    border-left: 5px solid #8b2929;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.tarjeta h2 {
+    color: #8b2929;
+    margin-bottom: 12px;
+}
+
+.tarjeta p {
+    line-height: 1.6;
+}
+
+/* FOOTER */
+
+.footer {
+    background-color: #292929;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: auto;
+}
+
+.footer p {
+    margin: 4px;
+}
+-----
+/* TABLAS */
+
+.descripcion {
+    margin-bottom: 25px;
+    color: #666666;
+}
+
+.tabla-contenedor {
+    overflow-x: auto;
+}
+
+.tabla {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.tabla thead {
+    background-color: #8b2929;
+    color: white;
+}
+
+.tabla th,
+.tabla td {
+    padding: 14px 16px;
+    text-align: left;
+    border-bottom: 1px solid #dddddd;
+}
+
+.tabla tbody tr:hover {
+    background-color: #f7f7f7;
+}
+
+.estado {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.estado.activo {
+    background-color: #e4f5e9;
+    color: #20783a;
+}
+
+.estado.inactivo {
+    background-color: #f7e5e5;
+    color: #a52a2a;
+}
+----
+.boton {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 11px 20px;
+    background-color: #8b2929;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.boton:hover {
+    background-color: #6f2020;
+}
+--
+.estado.pendiente {
+    background-color: #fff3cd;
+    color: #856404;
+}
+--
+/* PORTADA SGR */
+
+.titulo-principal {
+    color: #8b2929;
+    font-weight: 700;
+}
+
+.btn-municipal {
+    background-color: #8b2929;
+    border-color: #8b2929;
+    color: white;
+}
+
+.btn-municipal:hover {
+    background-color: #6f2020;
+    border-color: #6f2020;
+    color: white;
+}
+
+.card {
+    border: none;
+    border-top: 4px solid #8b2929;
+}
+
+.card-title {
+    color: #8b2929;
+    font-weight: 700;
+}
+--
+/* IMÁGENES DE LOS MÓDULOS */
+
+.imagen-modulo {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+}
