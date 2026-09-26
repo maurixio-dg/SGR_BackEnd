@@ -14,6 +14,38 @@ SGR | Funcionarios registrados
         Funcionarios asociados a las Delegaciones Municipales.
     </p>
 
+    <!-- BUSCADOR Y BOTÓN AGREGAR -->
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mt-4">
+
+        <form method="GET" class="d-flex gap-2">
+            <input
+                type="text"
+                name="buscar"
+                class="form-control"
+                placeholder="Buscar funcionario..."
+                value="{{ busqueda }}"
+            >
+
+            <button type="submit" class="btn btn-municipal">
+                Buscar
+            </button>
+
+            {% if busqueda %}
+                <a href="{% url 'listar_funcionarios' %}"
+                   class="btn btn-outline-secondary">
+                    Limpiar
+                </a>
+            {% endif %}
+        </form>
+
+        <a href="/admin/app_funcionarios/funcionario/add/"
+           class="btn btn-municipal">
+            + Agregar funcionario
+        </a>
+
+    </div>
+
+    <!-- TABLA -->
     <div class="tabla-contenedor">
 
         <table class="tabla">
@@ -25,6 +57,7 @@ SGR | Funcionarios registrados
                     <th>Cargo</th>
                     <th>Delegación</th>
                     <th>Estado</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
 
@@ -45,12 +78,21 @@ SGR | Funcionarios registrados
                             <span class="estado inactivo">Inactivo</span>
                         {% endif %}
                     </td>
+
+                    <td>
+                        <a
+                            href="/admin/app_funcionarios/funcionario/{{ funcionario.id }}/change/"
+                            class="btn btn-sm btn-outline-secondary">
+                            Modificar
+                        </a>
+                    </td>
+
                 </tr>
 
                 {% empty %}
 
                 <tr>
-                    <td colspan="5">
+                    <td colspan="6">
                         No existen funcionarios registrados.
                     </td>
                 </tr>

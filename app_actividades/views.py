@@ -1,8 +1,7 @@
-import json
-import os
-
-from django.conf import settings
 from django.shortcuts import render
+from django.db.models import Q
+
+from .models import Actividad
 
 
 def inicio_actividades(request):
@@ -10,19 +9,21 @@ def inicio_actividades(request):
 
 
 def listar_actividades(request):
+    busqueda = request.GET.get('buscar', '')
 
-    ruta_json = os.path.join(
-        settings.BASE_DIR,
-        'app_actividades',
-        'data',
-        'actividades.json'
-    )
+    actividades = Actividad.objects.select_related(
+        'funcionario'
+    ).all()
 
-    with open(ruta_json, 'r', encoding='utf-8') as archivo:
-        actividades = json.load(archivo)
+    if busqueda:
+        actividades = actividades.filter(
+            Q(actividad__icontains=busqueda) |
+            Q(funcionario__nombre__icontains=busqueda)
+        )
 
     contexto = {
-        'actividades': actividades
+        'actividades': actividades,
+        'busqueda': busqueda
     }
 
     return render(

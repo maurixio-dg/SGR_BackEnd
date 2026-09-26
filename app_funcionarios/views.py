@@ -1,8 +1,5 @@
-import json
-import os
-
-from django.conf import settings
 from django.shortcuts import render
+from .models import Funcionario
 
 
 def inicio_funcionarios(request):
@@ -10,19 +7,18 @@ def inicio_funcionarios(request):
 
 
 def listar_funcionarios(request):
+    busqueda = request.GET.get('buscar', '')
 
-    ruta_json = os.path.join(
-        settings.BASE_DIR,
-        'app_funcionarios',
-        'data',
-        'funcionarios.json'
-    )
+    funcionarios = Funcionario.objects.all()
 
-    with open(ruta_json, 'r', encoding='utf-8') as archivo:
-        funcionarios = json.load(archivo)
+    if busqueda:
+        funcionarios = funcionarios.filter(
+            nombre__icontains=busqueda
+        )
 
     contexto = {
-        'funcionarios': funcionarios
+        'funcionarios': funcionarios,
+        'busqueda': busqueda
     }
 
     return render(
