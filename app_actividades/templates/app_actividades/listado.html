@@ -15,7 +15,7 @@ SGR | Actividades registradas
         de las Delegaciones Municipales.
     </p>
 
-    <!-- BUSCADOR Y AGREGAR -->
+    <!-- BUSCADOR Y BOTÓN AGREGAR -->
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mt-4">
 
         <form method="GET" class="d-flex gap-2">
@@ -28,27 +28,31 @@ SGR | Actividades registradas
                 value="{{ busqueda }}"
             >
 
-            <button type="submit" class="btn btn-municipal">
+            <button
+                type="submit"
+                class="btn btn-municipal">
                 Buscar
             </button>
 
             {% if busqueda %}
-                <a href="{% url 'listar_actividades' %}"
-                   class="btn btn-outline-secondary">
+                <a
+                    href="{% url 'listar_actividades' %}"
+                    class="btn btn-outline-secondary">
                     Limpiar
                 </a>
             {% endif %}
 
         </form>
 
-        <a href="/admin/app_actividades/actividad/add/"
-           class="btn btn-municipal">
+        <a
+            href="/admin/app_actividades/actividad/add/"
+            class="btn btn-municipal">
             + Agregar actividad
         </a>
 
     </div>
 
-    <!-- TABLA -->
+    <!-- TABLA DE ACTIVIDADES -->
     <div class="tabla-contenedor">
 
         <table class="tabla">
@@ -70,50 +74,85 @@ SGR | Actividades registradas
 
                 {% for actividad in actividades %}
 
-                <tr>
-                    <td>{{ actividad.id }}</td>
-                    <td>{{ actividad.fecha }}</td>
-                    <td>{{ actividad.funcionario.nombre }}</td>
-                    <td>{{ actividad.actividad }}</td>
-                    <td>{{ actividad.tipo }}</td>
+                    <tr>
 
-                    <td>
-                        {% if actividad.estado == "Validada" %}
-                            <span class="estado activo">
-                                Validada
-                            </span>
-                        {% else %}
-                            <span class="estado pendiente">
-                                Pendiente
-                            </span>
-                        {% endif %}
-                    </td>
+                        <td>
+                            {{ actividad.id }}
+                        </td>
 
-                    <td>
-                        {% if actividad.evidencia %}
-                            Sí
-                        {% else %}
-                            No
-                        {% endif %}
-                    </td>
+                        <td>
+                            {{ actividad.fecha }}
+                        </td>
 
-                    <td>
-                        <a
-                            href="/admin/app_actividades/actividad/{{ actividad.id }}/change/"
-                            class="btn btn-sm btn-outline-secondary">
-                            Modificar
-                        </a>
-                    </td>
+                        <td>
+                            {{ actividad.funcionario.nombre }}
+                        </td>
 
-                </tr>
+                        <td>
+                            {{ actividad.actividad }}
+                        </td>
+
+                        <td>
+                            {{ actividad.tipo }}
+                        </td>
+
+                        <td>
+
+                            {% if actividad.estado == "Validada" %}
+
+                                <span class="estado activo">
+                                    Validada
+                                </span>
+
+                            {% else %}
+
+                                <span class="estado pendiente">
+                                    Pendiente
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+
+                            {% if actividad.evidencia %}
+                                Sí
+                            {% else %}
+                                No
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+
+                            <div class="d-flex gap-2">
+
+                                <a
+                                    href="/admin/app_actividades/actividad/{{ actividad.id }}/change/"
+                                    class="btn btn-sm btn-outline-secondary">
+                                    Modificar
+                                </a>
+
+                                <a
+                                    href="/admin/app_actividades/actividad/{{ actividad.id }}/delete/"
+                                    class="btn btn-sm btn-outline-danger">
+                                    Eliminar
+                                </a>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
 
                 {% empty %}
 
-                <tr>
-                    <td colspan="8">
-                        No existen actividades registradas.
-                    </td>
-                </tr>
+                    <tr>
+                        <td colspan="8">
+                            No existen actividades registradas.
+                        </td>
+                    </tr>
 
                 {% endfor %}
 

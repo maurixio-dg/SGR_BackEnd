@@ -18,6 +18,7 @@ SGR | Funcionarios registrados
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mt-4">
 
         <form method="GET" class="d-flex gap-2">
+
             <input
                 type="text"
                 name="buscar"
@@ -26,26 +27,31 @@ SGR | Funcionarios registrados
                 value="{{ busqueda }}"
             >
 
-            <button type="submit" class="btn btn-municipal">
+            <button
+                type="submit"
+                class="btn btn-municipal">
                 Buscar
             </button>
 
             {% if busqueda %}
-                <a href="{% url 'listar_funcionarios' %}"
-                   class="btn btn-outline-secondary">
+                <a
+                    href="{% url 'listar_funcionarios' %}"
+                    class="btn btn-outline-secondary">
                     Limpiar
                 </a>
             {% endif %}
+
         </form>
 
-        <a href="/admin/app_funcionarios/funcionario/add/"
-           class="btn btn-municipal">
+        <a
+            href="/admin/app_funcionarios/funcionario/add/"
+            class="btn btn-municipal">
             + Agregar funcionario
         </a>
 
     </div>
 
-    <!-- TABLA -->
+    <!-- TABLA DE FUNCIONARIOS -->
     <div class="tabla-contenedor">
 
         <table class="tabla">
@@ -65,37 +71,71 @@ SGR | Funcionarios registrados
 
                 {% for funcionario in funcionarios %}
 
-                <tr>
-                    <td>{{ funcionario.id }}</td>
-                    <td>{{ funcionario.nombre }}</td>
-                    <td>{{ funcionario.cargo }}</td>
-                    <td>{{ funcionario.delegacion }}</td>
+                    <tr>
 
-                    <td>
-                        {% if funcionario.estado == "Activo" %}
-                            <span class="estado activo">Activo</span>
-                        {% else %}
-                            <span class="estado inactivo">Inactivo</span>
-                        {% endif %}
-                    </td>
+                        <td>
+                            {{ funcionario.id }}
+                        </td>
 
-                    <td>
-                        <a
-                            href="/admin/app_funcionarios/funcionario/{{ funcionario.id }}/change/"
-                            class="btn btn-sm btn-outline-secondary">
-                            Modificar
-                        </a>
-                    </td>
+                        <td>
+                            {{ funcionario.nombre }}
+                        </td>
 
-                </tr>
+                        <td>
+                            {{ funcionario.cargo }}
+                        </td>
+
+                        <td>
+                            {{ funcionario.delegacion }}
+                        </td>
+
+                        <td>
+
+                            {% if funcionario.estado == "Activo" %}
+
+                                <span class="estado activo">
+                                    Activo
+                                </span>
+
+                            {% else %}
+
+                                <span class="estado inactivo">
+                                    Inactivo
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+
+                            <div class="d-flex gap-2">
+
+                                <a
+                                    href="/admin/app_funcionarios/funcionario/{{ funcionario.id }}/change/"
+                                    class="btn btn-sm btn-outline-secondary">
+                                    Modificar
+                                </a>
+
+                                <a
+                                    href="/admin/app_funcionarios/funcionario/{{ funcionario.id }}/delete/"
+                                    class="btn btn-sm btn-outline-danger">
+                                    Eliminar
+                                </a>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
 
                 {% empty %}
 
-                <tr>
-                    <td colspan="6">
-                        No existen funcionarios registrados.
-                    </td>
-                </tr>
+                    <tr>
+                        <td colspan="6">
+                            No existen funcionarios registrados.
+                        </td>
+                    </tr>
 
                 {% endfor %}
 
