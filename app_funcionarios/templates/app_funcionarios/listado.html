@@ -1,3 +1,4 @@
+
 {% extends 'base.html' %}
 
 {% block title %}
@@ -8,16 +9,45 @@ SGR | Funcionarios registrados
 
 <div class="tarjeta">
 
+    <!-- ENCABEZADO -->
     <h2>Funcionarios registrados</h2>
 
     <p class="descripcion">
-        Funcionarios asociados a las Delegaciones Municipales.
+        Administración y consulta de funcionarios
+        asociados a las Delegaciones Municipales.
     </p>
+
+
+    <!-- MENSAJES DEL SISTEMA -->
+    {% if messages %}
+
+        {% for message in messages %}
+
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show"
+                 role="alert">
+
+                {{ message }}
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                        aria-label="Cerrar">
+                </button>
+
+            </div>
+
+        {% endfor %}
+
+    {% endif %}
+
 
     <!-- BUSCADOR Y BOTÓN AGREGAR -->
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mt-4">
 
-        <form method="GET" class="d-flex gap-2">
+        <!-- BUSCADOR -->
+        <form method="GET"
+              action="{% url 'listar_funcionarios' %}"
+              class="d-flex gap-2 flex-wrap">
 
             <input
                 type="text"
@@ -27,36 +57,45 @@ SGR | Funcionarios registrados
                 value="{{ busqueda }}"
             >
 
-            <button
-                type="submit"
-                class="btn btn-municipal">
+            <button type="submit"
+                    class="btn btn-municipal">
                 Buscar
             </button>
 
             {% if busqueda %}
-                <a
-                    href="{% url 'listar_funcionarios' %}"
-                    class="btn btn-outline-secondary">
+
+                <a href="{% url 'listar_funcionarios' %}"
+                   class="btn btn-outline-secondary">
                     Limpiar
                 </a>
+
             {% endif %}
 
         </form>
 
-        <a
-            href="/admin/app_funcionarios/funcionario/add/"
-            class="btn btn-municipal">
-            + Agregar funcionario
-        </a>
+
+        <!-- REGISTRAR FUNCIONARIO -->
+        {% if perms.app_funcionarios.add_funcionario %}
+
+            <a href="{% url 'crear_funcionario' %}"
+               class="btn btn-municipal">
+
+                + Agregar funcionario
+
+            </a>
+
+        {% endif %}
 
     </div>
 
+
     <!-- TABLA DE FUNCIONARIOS -->
-    <div class="tabla-contenedor">
+    <div class="tabla-contenedor mt-4">
 
         <table class="tabla">
 
             <thead>
+
                 <tr>
                     <th>ID</th>
                     <th>Funcionario</th>
@@ -65,7 +104,9 @@ SGR | Funcionarios registrados
                     <th>Estado</th>
                     <th>Acciones</th>
                 </tr>
+
             </thead>
+
 
             <tbody>
 
@@ -73,25 +114,34 @@ SGR | Funcionarios registrados
 
                     <tr>
 
+                        <!-- ID -->
                         <td>
                             {{ funcionario.id }}
                         </td>
 
+
+                        <!-- NOMBRE -->
                         <td>
                             {{ funcionario.nombre }}
                         </td>
 
+
+                        <!-- CARGO -->
                         <td>
                             {{ funcionario.cargo }}
                         </td>
 
+
+                        <!-- DELEGACIÓN -->
                         <td>
                             {{ funcionario.delegacion }}
                         </td>
 
+
+                        <!-- ESTADO -->
                         <td>
 
-                            {% if funcionario.estado == "Activo" %}
+                            {% if funcionario.estado == 'Activo' %}
 
                                 <span class="estado activo">
                                     Activo
@@ -107,21 +157,46 @@ SGR | Funcionarios registrados
 
                         </td>
 
+
+                        <!-- ACCIONES -->
                         <td>
 
-                            <div class="d-flex gap-2">
+                            <div class="d-flex gap-2 flex-wrap">
 
-                                <a
-                                    href="/admin/app_funcionarios/funcionario/{{ funcionario.id }}/change/"
-                                    class="btn btn-sm btn-outline-secondary">
-                                    Modificar
-                                </a>
+                                <!-- MODIFICAR -->
+                                {% if perms.app_funcionarios.change_funcionario %}
 
-                                <a
-                                    href="/admin/app_funcionarios/funcionario/{{ funcionario.id }}/delete/"
-                                    class="btn btn-sm btn-outline-danger">
-                                    Eliminar
-                                </a>
+                                    <a href="{% url 'editar_funcionario' funcionario.pk %}"
+                                       class="btn btn-sm btn-outline-secondary">
+
+                                        Modificar
+
+                                    </a>
+
+                                {% endif %}
+
+
+                                <!-- ELIMINAR -->
+                                {% if perms.app_funcionarios.delete_funcionario %}
+
+                                    <a href="{% url 'eliminar_funcionario' funcionario.pk %}"
+                                       class="btn btn-sm btn-outline-danger">
+
+                                        Eliminar
+
+                                    </a>
+
+                                {% endif %}
+
+
+                                <!-- SOLO CONSULTA -->
+                                {% if not perms.app_funcionarios.change_funcionario and not perms.app_funcionarios.delete_funcionario %}
+
+                                    <span class="text-muted small">
+                                        Solo consulta
+                                    </span>
+
+                                {% endif %}
 
                             </div>
 
@@ -132,8 +207,11 @@ SGR | Funcionarios registrados
                 {% empty %}
 
                     <tr>
-                        <td colspan="6">
-                            No existen funcionarios registrados.
+                        <td colspan="6"
+                            class="text-center py-4">
+
+                            No se encontraron funcionarios registrados.
+
                         </td>
                     </tr>
 
@@ -142,6 +220,19 @@ SGR | Funcionarios registrados
             </tbody>
 
         </table>
+
+    </div>
+
+
+    <!-- VOLVER AL DASHBOARD -->
+    <div class="mt-4">
+
+        <a href="{% url 'inicio' %}"
+           class="btn btn-outline-secondary">
+
+            Volver al panel principal
+
+        </a>
 
     </div>
 

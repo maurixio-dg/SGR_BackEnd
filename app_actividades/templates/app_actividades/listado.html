@@ -1,3 +1,4 @@
+
 {% extends 'base.html' %}
 
 {% block title %}
@@ -8,17 +9,46 @@ SGR | Actividades registradas
 
 <div class="tarjeta">
 
+    <!-- ENCABEZADO -->
     <h2>Actividades registradas</h2>
 
     <p class="descripcion">
-        Seguimiento de actividades realizadas por los funcionarios
-        de las Delegaciones Municipales.
+        Administración y seguimiento de las actividades
+        realizadas por los funcionarios de las
+        Delegaciones Municipales.
     </p>
+
+
+    <!-- MENSAJES DEL SISTEMA -->
+    {% if messages %}
+
+        {% for message in messages %}
+
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show"
+                 role="alert">
+
+                {{ message }}
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                        aria-label="Cerrar">
+                </button>
+
+            </div>
+
+        {% endfor %}
+
+    {% endif %}
+
 
     <!-- BUSCADOR Y BOTÓN AGREGAR -->
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mt-4">
 
-        <form method="GET" class="d-flex gap-2">
+        <!-- BUSCADOR -->
+        <form method="GET"
+              action="{% url 'listar_actividades' %}"
+              class="d-flex gap-2 flex-wrap">
 
             <input
                 type="text"
@@ -28,36 +58,49 @@ SGR | Actividades registradas
                 value="{{ busqueda }}"
             >
 
-            <button
-                type="submit"
-                class="btn btn-municipal">
+            <button type="submit"
+                    class="btn btn-municipal">
+
                 Buscar
+
             </button>
 
             {% if busqueda %}
-                <a
-                    href="{% url 'listar_actividades' %}"
-                    class="btn btn-outline-secondary">
+
+                <a href="{% url 'listar_actividades' %}"
+                   class="btn btn-outline-secondary">
+
                     Limpiar
+
                 </a>
+
             {% endif %}
 
         </form>
 
-        <a
-            href="/admin/app_actividades/actividad/add/"
-            class="btn btn-municipal">
-            + Agregar actividad
-        </a>
+
+        <!-- REGISTRAR ACTIVIDAD -->
+        {% if perms.app_actividades.add_actividad %}
+
+            <a href="{% url 'crear_actividad' %}"
+               class="btn btn-municipal">
+
+                + Agregar actividad
+
+            </a>
+
+        {% endif %}
 
     </div>
 
+
     <!-- TABLA DE ACTIVIDADES -->
-    <div class="tabla-contenedor">
+    <div class="tabla-contenedor mt-4">
 
         <table class="tabla">
 
             <thead>
+
                 <tr>
                     <th>ID</th>
                     <th>Fecha</th>
@@ -68,7 +111,9 @@ SGR | Actividades registradas
                     <th>Evidencia</th>
                     <th>Acciones</th>
                 </tr>
+
             </thead>
+
 
             <tbody>
 
@@ -76,29 +121,40 @@ SGR | Actividades registradas
 
                     <tr>
 
+                        <!-- ID -->
                         <td>
                             {{ actividad.id }}
                         </td>
 
+
+                        <!-- FECHA -->
                         <td>
-                            {{ actividad.fecha }}
+                            {{ actividad.fecha|date:"d/m/Y" }}
                         </td>
 
+
+                        <!-- FUNCIONARIO -->
                         <td>
                             {{ actividad.funcionario.nombre }}
                         </td>
 
+
+                        <!-- DESCRIPCIÓN -->
                         <td>
                             {{ actividad.actividad }}
                         </td>
 
+
+                        <!-- TIPO -->
                         <td>
                             {{ actividad.tipo }}
                         </td>
 
+
+                        <!-- ESTADO -->
                         <td>
 
-                            {% if actividad.estado == "Validada" %}
+                            {% if actividad.estado == 'Validada' %}
 
                                 <span class="estado activo">
                                     Validada
@@ -114,31 +170,66 @@ SGR | Actividades registradas
 
                         </td>
 
+
+                        <!-- EVIDENCIA -->
                         <td>
 
                             {% if actividad.evidencia %}
-                                Sí
+
+                                <span class="badge bg-success">
+                                    Sí
+                                </span>
+
                             {% else %}
-                                No
+
+                                <span class="badge bg-secondary">
+                                    No
+                                </span>
+
                             {% endif %}
 
                         </td>
 
+
+                        <!-- ACCIONES -->
                         <td>
 
-                            <div class="d-flex gap-2">
+                            <div class="d-flex gap-2 flex-wrap">
 
-                                <a
-                                    href="/admin/app_actividades/actividad/{{ actividad.id }}/change/"
-                                    class="btn btn-sm btn-outline-secondary">
-                                    Modificar
-                                </a>
+                                <!-- MODIFICAR -->
+                                {% if perms.app_actividades.change_actividad %}
 
-                                <a
-                                    href="/admin/app_actividades/actividad/{{ actividad.id }}/delete/"
-                                    class="btn btn-sm btn-outline-danger">
-                                    Eliminar
-                                </a>
+                                    <a href="{% url 'editar_actividad' actividad.pk %}"
+                                       class="btn btn-sm btn-outline-secondary">
+
+                                        Modificar
+
+                                    </a>
+
+                                {% endif %}
+
+
+                                <!-- ELIMINAR -->
+                                {% if perms.app_actividades.delete_actividad %}
+
+                                    <a href="{% url 'eliminar_actividad' actividad.pk %}"
+                                       class="btn btn-sm btn-outline-danger">
+
+                                        Eliminar
+
+                                    </a>
+
+                                {% endif %}
+
+
+                                <!-- SOLO CONSULTA -->
+                                {% if not perms.app_actividades.change_actividad and not perms.app_actividades.delete_actividad %}
+
+                                    <span class="text-muted small">
+                                        Solo consulta
+                                    </span>
+
+                                {% endif %}
 
                             </div>
 
@@ -149,9 +240,14 @@ SGR | Actividades registradas
                 {% empty %}
 
                     <tr>
-                        <td colspan="8">
-                            No existen actividades registradas.
+
+                        <td colspan="8"
+                            class="text-center py-4">
+
+                            No se encontraron actividades registradas.
+
                         </td>
+
                     </tr>
 
                 {% endfor %}
@@ -159,6 +255,19 @@ SGR | Actividades registradas
             </tbody>
 
         </table>
+
+    </div>
+
+
+    <!-- VOLVER AL DASHBOARD -->
+    <div class="mt-4">
+
+        <a href="{% url 'inicio' %}"
+           class="btn btn-outline-secondary">
+
+            Volver al panel principal
+
+        </a>
 
     </div>
 

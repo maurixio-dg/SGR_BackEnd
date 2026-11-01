@@ -1,0 +1,271 @@
+
+{% extends 'base.html' %}
+
+{% block title %}SGR | {{ titulo }}{% endblock %}
+
+{% block content %}
+
+<div class="container py-4">
+
+    <!-- ENCABEZADO -->
+    <section class="mb-4">
+
+        <span class="badge bg-secondary mb-3">
+            Gestión de Actividades
+        </span>
+
+        <h1 class="titulo-principal">
+            {{ titulo }}
+        </h1>
+
+        <p class="text-muted">
+            Complete la información de la actividad municipal.
+            Los datos serán validados antes de guardarse
+            en el Sistema de Gestión de Resultados.
+        </p>
+
+    </section>
+
+
+    <!-- FORMULARIO PRINCIPAL -->
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-body p-4">
+
+                    <h2 class="h4 mb-4">
+                        Información de la actividad
+                    </h2>
+
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+
+                        <!-- ERRORES GENERALES -->
+                        {% if formulario.non_field_errors %}
+
+                            <div class="alert alert-danger"
+                                 role="alert">
+
+                                {% for error in formulario.non_field_errors %}
+
+                                    <p class="mb-1">
+                                        {{ error }}
+                                    </p>
+
+                                {% endfor %}
+
+                            </div>
+
+                        {% endif %}
+
+
+                        <!-- FECHA -->
+                        <div class="mb-4">
+
+                            <label for="{{ formulario.fecha.id_for_label }}"
+                                   class="form-label fw-semibold">
+
+                                Fecha de la actividad
+
+                            </label>
+
+                            {{ formulario.fecha }}
+
+                            {% for error in formulario.fecha.errors %}
+
+                                <div class="text-danger small mt-1">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                            <div class="form-text">
+                                Seleccione la fecha en que se realiza
+                                o está programada la actividad.
+                            </div>
+
+                        </div>
+
+
+                        <!-- FUNCIONARIO RESPONSABLE -->
+                        <div class="mb-4">
+
+                            <label for="{{ formulario.funcionario.id_for_label }}"
+                                   class="form-label fw-semibold">
+
+                                Funcionario responsable
+
+                            </label>
+
+                            {{ formulario.funcionario }}
+
+                            {% for error in formulario.funcionario.errors %}
+
+                                <div class="text-danger small mt-1">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                            <div class="form-text">
+                                Seleccione un funcionario registrado
+                                en el sistema.
+                            </div>
+
+                        </div>
+
+
+                        <!-- DESCRIPCIÓN DE LA ACTIVIDAD -->
+                        <div class="mb-4">
+
+                            <label for="{{ formulario.actividad.id_for_label }}"
+                                   class="form-label fw-semibold">
+
+                                Descripción de la actividad
+
+                            </label>
+
+                            {{ formulario.actividad }}
+
+                            {% for error in formulario.actividad.errors %}
+
+                                <div class="text-danger small mt-1">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                            <div class="form-text">
+                                Describa la actividad utilizando
+                                al menos 5 caracteres.
+                            </div>
+
+                        </div>
+
+
+                        <!-- TIPO DE ACTIVIDAD -->
+                        <div class="mb-4">
+
+                            <label for="{{ formulario.tipo.id_for_label }}"
+                                   class="form-label fw-semibold">
+
+                                Tipo de actividad
+
+                            </label>
+
+                            {{ formulario.tipo }}
+
+                            {% for error in formulario.tipo.errors %}
+
+                                <div class="text-danger small mt-1">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                            <div class="form-text">
+                                Seleccione Reunión, Atención,
+                                Terreno o Seguimiento.
+                            </div>
+
+                        </div>
+
+
+                        <!-- ESTADO DE VALIDACIÓN -->
+                        <div class="mb-4">
+
+                            <label for="{{ formulario.estado.id_for_label }}"
+                                   class="form-label fw-semibold">
+
+                                Estado de validación
+
+                            </label>
+
+                            {{ formulario.estado }}
+
+                            {% for error in formulario.estado.errors %}
+
+                                <div class="text-danger small mt-1">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                            <div class="form-text">
+                                Indique si la actividad está
+                                Pendiente o Validada.
+                            </div>
+
+                        </div>
+
+
+                        <!-- EVIDENCIA -->
+                        <div class="mb-4">
+
+                            <div class="form-check">
+
+                                {{ formulario.evidencia }}
+
+                                <label for="{{ formulario.evidencia.id_for_label }}"
+                                       class="form-check-label fw-semibold">
+
+                                    ¿Tiene evidencia registrada?
+
+                                </label>
+
+                            </div>
+
+                            {% for error in formulario.evidencia.errors %}
+
+                                <div class="text-danger small mt-1">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                            <div class="form-text">
+                                Marque esta casilla si la actividad
+                                cuenta con evidencia registrada.
+                            </div>
+
+                        </div>
+
+
+                        <!-- BOTONES -->
+                        <div class="d-flex flex-wrap gap-3 mt-4">
+
+                            <button type="submit"
+                                    class="btn btn-municipal">
+
+                                {{ texto_boton }}
+
+                            </button>
+
+                            <a href="{% url 'listar_actividades' %}"
+                               class="btn btn-outline-secondary">
+
+                                Cancelar
+
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
