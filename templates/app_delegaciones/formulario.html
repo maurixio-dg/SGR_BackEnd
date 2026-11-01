@@ -1,0 +1,143 @@
+
+{% extends 'base.html' %}
+
+{% block title %}
+SGR | {{ titulo }}
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-4">
+
+    <!-- ENCABEZADO -->
+    <div class="mb-4">
+
+        <h2 class="titulo-principal">
+            {{ titulo }}
+        </h2>
+
+        <p class="text-muted">
+            Complete los datos correspondientes
+            a la delegación municipal.
+        </p>
+
+    </div>
+
+    <!-- FORMULARIO -->
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body p-4">
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                <!-- ERRORES GENERALES -->
+                {% if formulario.non_field_errors %}
+
+                    <div class="alert alert-danger">
+                        {{ formulario.non_field_errors }}
+                    </div>
+
+                {% endif %}
+
+                <div class="row g-3">
+
+                    <!-- NOMBRE -->
+                    <div class="col-md-6">
+
+                        <label class="form-label"
+                               for="{{ formulario.nombre.id_for_label }}">
+                            Nombre de la delegación
+                        </label>
+
+                        {{ formulario.nombre }}
+
+                        {% for error in formulario.nombre.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+
+                    </div>
+
+                    <!-- SECTOR -->
+                    <div class="col-md-6">
+
+                        <label class="form-label"
+                               for="{{ formulario.sector.id_for_label }}">
+                            Sector
+                        </label>
+
+                        {{ formulario.sector }}
+
+                        {% for error in formulario.sector.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+
+                    </div>
+
+                    <!-- DIRECCIÓN -->
+                    <div class="col-md-8">
+
+                        <label class="form-label"
+                               for="{{ formulario.direccion.id_for_label }}">
+                            Dirección
+                        </label>
+
+                        {{ formulario.direccion }}
+
+                        {% for error in formulario.direccion.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+
+                    </div>
+
+                    <!-- ESTADO -->
+                    <div class="col-md-4">
+
+                        <label class="form-label"
+                               for="{{ formulario.estado.id_for_label }}">
+                            Estado
+                        </label>
+
+                        {{ formulario.estado }}
+
+                        {% for error in formulario.estado.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+                <!-- BOTONES -->
+                <div class="d-flex gap-2 mt-4">
+
+                    <button type="submit"
+                            class="btn btn-municipal">
+                        {{ texto_boton }}
+                    </button>
+
+                    <a href="{% url 'listar_delegaciones' %}"
+                       class="btn btn-outline-secondary">
+                        Cancelar
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

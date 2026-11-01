@@ -1,0 +1,195 @@
+
+{% extends 'base.html' %}
+
+{% block title %}SGR | {{ titulo }}{% endblock %}
+
+{% block content %}
+
+<div class="container py-4">
+
+    <!-- ENCABEZADO -->
+    <section class="mb-4">
+
+        <span class="badge bg-secondary mb-3">
+            Gestión de Funcionarios
+        </span>
+
+        <h1 class="titulo-principal">
+            {{ titulo }}
+        </h1>
+
+        <p class="text-muted">
+            Complete la información del funcionario
+            municipal. Los datos serán validados
+            antes de guardarse en el sistema.
+        </p>
+
+    </section>
+
+
+    <!-- FORMULARIO -->
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-body p-4">
+
+                    <h2 class="h4 mb-4">
+                        Información del funcionario
+                    </h2>
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+
+                        <!-- ERRORES GENERALES -->
+                        {% if formulario.non_field_errors %}
+
+                            <div class="alert alert-danger">
+
+                                {% for error in formulario.non_field_errors %}
+
+                                    <p class="mb-1">
+                                        {{ error }}
+                                    </p>
+
+                                {% endfor %}
+
+                            </div>
+
+                        {% endif %}
+
+
+                        <!-- NOMBRE -->
+                        <div class="mb-4">
+
+                            <label for="{{ formulario.nombre.id_for_label }}"
+                                   class="form-label fw-semibold">
+                                Nombre del funcionario
+                            </label>
+
+                            {{ formulario.nombre }}
+
+                            {% for error in formulario.nombre.errors %}
+
+                                <div class="text-danger small mt-1">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                            <div class="form-text">
+                                Ingrese el nombre del funcionario.
+                            </div>
+
+                        </div>
+
+
+                        <!-- CARGO -->
+                        <div class="mb-4">
+
+                            <label for="{{ formulario.cargo.id_for_label }}"
+                                   class="form-label fw-semibold">
+                                Cargo
+                            </label>
+
+                            {{ formulario.cargo }}
+
+                            {% for error in formulario.cargo.errors %}
+
+                                <div class="text-danger small mt-1">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                            <div class="form-text">
+                                Indique el cargo que desempeña
+                                el funcionario.
+                            </div>
+
+                        </div>
+
+
+                        <!-- DELEGACIÓN -->
+                        <div class="mb-4">
+
+                            <label for="{{ formulario.delegacion.id_for_label }}"
+                                   class="form-label fw-semibold">
+                                Delegación municipal
+                            </label>
+
+                            {{ formulario.delegacion }}
+
+                            {% for error in formulario.delegacion.errors %}
+
+                                <div class="text-danger small mt-1">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                            <div class="form-text">
+                                Ingrese la delegación municipal
+                                a la que pertenece.
+                            </div>
+
+                        </div>
+
+
+                        <!-- ESTADO -->
+                        <div class="mb-4">
+
+                            <label for="{{ formulario.estado.id_for_label }}"
+                                   class="form-label fw-semibold">
+                                Estado del funcionario
+                            </label>
+
+                            {{ formulario.estado }}
+
+                            {% for error in formulario.estado.errors %}
+
+                                <div class="text-danger small mt-1">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                            <div class="form-text">
+                                Seleccione Activo o Inactivo.
+                            </div>
+
+                        </div>
+
+
+                        <!-- BOTONES -->
+                        <div class="d-flex flex-wrap gap-3 mt-4">
+
+                            <button type="submit"
+                                    class="btn btn-municipal">
+                                {{ texto_boton }}
+                            </button>
+
+                            <a href="{% url 'listar_funcionarios' %}"
+                               class="btn btn-outline-secondary">
+                                Cancelar
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

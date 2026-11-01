@@ -1,0 +1,265 @@
+
+{% extends 'base.html' %}
+
+{% block title %}SGR | Gestión de Cargos{% endblock %}
+
+{% block content %}
+
+<div class="container py-4">
+
+    <!-- ENCABEZADO DEL MANTENEDOR -->
+    <section class="mb-4">
+
+        <span class="badge bg-secondary mb-3">
+            Mantenedor Municipal
+        </span>
+
+        <h1 class="titulo-principal">
+            Gestión de Cargos Municipales
+        </h1>
+
+        <p class="text-muted">
+            Administración y consulta de los cargos
+            registrados en el Sistema de Gestión
+            de Resultados.
+        </p>
+
+    </section>
+
+
+    <!-- MENSAJES DEL SISTEMA -->
+    {% if messages %}
+
+        {% for message in messages %}
+
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show"
+                 role="alert">
+
+                {{ message }}
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                        aria-label="Cerrar">
+                </button>
+
+            </div>
+
+        {% endfor %}
+
+    {% endif %}
+
+
+    <!-- PANEL PRINCIPAL -->
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body p-4">
+
+            <!-- TÍTULO Y BOTÓN REGISTRAR -->
+            <div class="d-flex justify-content-between
+                        align-items-center flex-wrap gap-3 mb-4">
+
+                <h2 class="h4 mb-0">
+                    Listado de Cargos
+                </h2>
+
+                {% if perms.app_cargos.add_cargo %}
+
+                    <a href="{% url 'crear_cargo' %}"
+                       class="btn btn-municipal">
+
+                        + Nuevo cargo
+
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- BUSCADOR -->
+            <form method="GET"
+                  action="{% url 'listar_cargos' %}"
+                  class="row g-3 mb-4">
+
+                <div class="col-md-8">
+
+                    <input type="text"
+                           name="buscar"
+                           class="form-control"
+                           placeholder="Buscar por nombre o descripción"
+                           value="{{ busqueda }}">
+
+                </div>
+
+                <div class="col-md-4 d-flex gap-2">
+
+                    <button type="submit"
+                            class="btn btn-municipal">
+                        Buscar
+                    </button>
+
+                    <a href="{% url 'listar_cargos' %}"
+                       class="btn btn-outline-secondary">
+                        Limpiar
+                    </a>
+
+                </div>
+
+            </form>
+
+
+            <!-- TABLA DE CARGOS -->
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle">
+
+                    <thead class="table-light">
+
+                        <tr>
+
+                            <th scope="col">
+                                Nombre del cargo
+                            </th>
+
+                            <th scope="col">
+                                Descripción
+                            </th>
+
+                            <th scope="col">
+                                Estado
+                            </th>
+
+                            <th scope="col">
+                                Acciones
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for cargo in cargos %}
+
+                            <tr>
+
+                                <!-- NOMBRE -->
+                                <td>
+                                    <strong>
+                                        {{ cargo.nombre }}
+                                    </strong>
+                                </td>
+
+
+                                <!-- DESCRIPCIÓN -->
+                                <td>
+                                    {{ cargo.descripcion }}
+                                </td>
+
+
+                                <!-- ESTADO -->
+                                <td>
+
+                                    {% if cargo.estado == 'Activo' %}
+
+                                        <span class="badge bg-success">
+                                            Activo
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="badge bg-secondary">
+                                            Inactivo
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- ACCIONES -->
+                                <td>
+
+                                    <div class="d-flex flex-wrap gap-2">
+
+                                        {% if perms.app_cargos.change_cargo %}
+
+                                            <a href="{% url 'editar_cargo' cargo.pk %}"
+                                               class="btn btn-sm btn-outline-primary">
+
+                                                Modificar
+
+                                            </a>
+
+                                        {% endif %}
+
+
+                                        {% if perms.app_cargos.delete_cargo %}
+
+                                            <a href="{% url 'eliminar_cargo' cargo.pk %}"
+                                               class="btn btn-sm btn-outline-danger">
+
+                                                Eliminar
+
+                                            </a>
+
+                                        {% endif %}
+
+
+                                        {% if not perms.app_cargos.change_cargo and not perms.app_cargos.delete_cargo %}
+
+                                            <span class="text-muted small">
+                                                Solo consulta
+                                            </span>
+
+                                        {% endif %}
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        {% empty %}
+
+                            <tr>
+
+                                <td colspan="4"
+                                    class="text-center text-muted py-4">
+
+                                    No se encontraron cargos registrados.
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- VOLVER AL DASHBOARD -->
+    <div class="mt-4">
+
+        <a href="{% url 'inicio' %}"
+           class="btn btn-outline-secondary">
+
+            Volver al panel principal
+
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

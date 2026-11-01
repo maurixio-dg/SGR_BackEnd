@@ -1,0 +1,188 @@
+
+{% extends 'base.html' %}
+
+{% block title %}
+SGR | Eliminar actividad
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-4">
+
+    <!-- ENCABEZADO -->
+    <section class="mb-4">
+
+        <span class="badge bg-secondary mb-3">
+            Gestión de Actividades
+        </span>
+
+        <h1 class="titulo-principal">
+            Eliminar actividad
+        </h1>
+
+        <p class="text-muted">
+            Confirme la eliminación de la actividad
+            seleccionada del Sistema de Gestión
+            de Resultados.
+        </p>
+
+    </section>
+
+
+    <!-- TARJETA DE CONFIRMACIÓN -->
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-body p-4">
+
+                    <h2 class="h4 mb-4">
+                        Confirmación de eliminación
+                    </h2>
+
+
+                    <!-- ADVERTENCIA -->
+                    <div class="alert alert-warning"
+                         role="alert">
+
+                        <strong>Atención:</strong>
+
+                        Está a punto de eliminar una
+                        actividad municipal registrada
+                        en el sistema.
+
+                        Esta acción no se puede deshacer
+                        desde esta pantalla.
+
+                    </div>
+
+
+                    <!-- INFORMACIÓN DE LA ACTIVIDAD -->
+                    <div class="border rounded p-4 mb-4">
+
+                        <h3 class="h5 mb-3">
+                            Información de la actividad
+                        </h3>
+
+                        <!-- ID -->
+                        <p>
+                            <strong>ID:</strong>
+                            {{ actividad.id }}
+                        </p>
+
+                        <!-- FECHA -->
+                        <p>
+                            <strong>Fecha:</strong>
+                            {{ actividad.fecha|date:"d/m/Y" }}
+                        </p>
+
+                        <!-- FUNCIONARIO RESPONSABLE -->
+                        <p>
+                            <strong>Funcionario:</strong>
+                            {{ actividad.funcionario.nombre }}
+                        </p>
+
+                        <!-- DESCRIPCIÓN -->
+                        <p>
+                            <strong>Actividad:</strong>
+                            {{ actividad.actividad }}
+                        </p>
+
+                        <!-- TIPO -->
+                        <p>
+                            <strong>Tipo:</strong>
+                            {{ actividad.tipo }}
+                        </p>
+
+                        <!-- ESTADO -->
+                        <p>
+                            <strong>Estado:</strong>
+
+                            {% if actividad.estado == 'Validada' %}
+
+                                <span class="badge bg-success">
+                                    Validada
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge bg-warning text-dark">
+                                    Pendiente
+                                </span>
+
+                            {% endif %}
+                        </p>
+
+                        <!-- EVIDENCIA -->
+                        <p class="mb-0">
+                            <strong>Evidencia:</strong>
+
+                            {% if actividad.evidencia %}
+
+                                <span class="badge bg-success">
+                                    Sí
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge bg-secondary">
+                                    No
+                                </span>
+
+                            {% endif %}
+                        </p>
+
+                    </div>
+
+
+                    <!-- PREGUNTA DE CONFIRMACIÓN -->
+                    <p class="mb-4">
+
+                        ¿Está seguro de que desea eliminar
+                        la actividad
+
+                        <strong>
+                            {{ actividad.actividad }}
+                        </strong>?
+
+                    </p>
+
+
+                    <!-- FORMULARIO DE ELIMINACIÓN -->
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+                        <div class="d-flex flex-wrap gap-3">
+
+                            <button type="submit"
+                                    class="btn btn-danger">
+
+                                Sí, eliminar actividad
+
+                            </button>
+
+                            <a href="{% url 'listar_actividades' %}"
+                               class="btn btn-outline-secondary">
+
+                                Cancelar
+
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

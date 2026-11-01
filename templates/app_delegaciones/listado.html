@@ -1,0 +1,231 @@
+
+{% extends 'base.html' %}
+
+{% block title %}
+SGR | Delegaciones Municipales
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-4">
+
+    <!-- ENCABEZADO DEL MÓDULO -->
+    <div class="mb-4">
+
+        <h2 class="titulo-principal">
+            Gestión de Delegaciones Municipales
+        </h2>
+
+        <p class="text-muted">
+            Administración de las delegaciones
+            registradas en el Sistema de Gestión
+            de Resultados.
+        </p>
+
+    </div>
+
+
+    <!-- MENSAJES DE CONFIRMACIÓN -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}"
+                 role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+
+    <!-- BUSCADOR Y BOTÓN AGREGAR -->
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-body">
+
+            <div class="row g-3 align-items-end">
+
+                <div class="col-md-8">
+
+                    <form method="GET"
+                          action="{% url 'listar_delegaciones' %}">
+
+                        <label for="buscar"
+                               class="form-label">
+                            Buscar delegación
+                        </label>
+
+                        <div class="input-group">
+
+                            <input
+                                type="text"
+                                id="buscar"
+                                name="buscar"
+                                class="form-control"
+                                placeholder="Nombre, sector o dirección"
+                                value="{{ busqueda }}"
+                            >
+
+                            <button type="submit"
+                                    class="btn btn-municipal">
+                                Buscar
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+                <div class="col-md-4 text-md-end">
+
+                    {% if perms.app_delegaciones.add_delegacion %}
+
+                        <a href="{% url 'crear_delegacion' %}"
+                           class="btn btn-municipal">
+                            + Nueva delegación
+                        </a>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- TABLA DE DELEGACIONES -->
+    <div class="card shadow-sm">
+
+        <div class="card-body">
+
+            <h4 class="mb-3">
+                Delegaciones registradas
+            </h4>
+
+            <div class="table-responsive">
+
+                <table class="table table-striped
+                              table-hover align-middle">
+
+                    <thead class="table-light">
+
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Sector</th>
+                            <th>Dirección</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for delegacion in delegaciones %}
+
+                        <tr>
+
+                            <td>
+                                {{ delegacion.nombre }}
+                            </td>
+
+                            <td>
+                                {{ delegacion.sector }}
+                            </td>
+
+                            <td>
+                                {{ delegacion.direccion }}
+                            </td>
+
+                            <td>
+                                {% if delegacion.estado == 'Activa' %}
+
+                                    <span class="badge bg-success">
+                                        Activa
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="badge bg-secondary">
+                                        Inactiva
+                                    </span>
+
+                                {% endif %}
+                            </td>
+
+                            <td>
+
+                                <div class="d-flex gap-2 flex-wrap">
+
+                                    {% if perms.app_delegaciones.change_delegacion %}
+
+                                        <a href="{% url 'editar_delegacion' delegacion.pk %}"
+                                           class="btn btn-outline-primary btn-sm">
+                                            Modificar
+                                        </a>
+
+                                    {% endif %}
+
+                                    {% if perms.app_delegaciones.delete_delegacion %}
+
+                                        <a href="{% url 'eliminar_delegacion' delegacion.pk %}"
+                                           class="btn btn-outline-danger btn-sm">
+                                            Eliminar
+                                        </a>
+
+                                    {% endif %}
+
+                                    {% if not perms.app_delegaciones.change_delegacion and not perms.app_delegaciones.delete_delegacion %}
+
+                                        <span class="text-muted">
+                                            Solo consulta
+                                        </span>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                        {% empty %}
+
+                        <tr>
+                            <td colspan="5"
+                                class="text-center text-muted py-4">
+
+                                No se encontraron delegaciones
+                                registradas.
+
+                            </td>
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- VOLVER AL INICIO -->
+    <div class="mt-4">
+
+        <a href="{% url 'inicio' %}"
+           class="btn btn-outline-secondary">
+            Volver al panel principal
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

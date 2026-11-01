@@ -1,102 +1,405 @@
+
 {% extends 'base.html' %}
 
 {% block title %}
-SGR | Inicio
+Inicio | SGR
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .sgr-bienvenida {
+        background: linear-gradient(135deg, #882727, #800020);
+        color: white;
+        border-radius: 12px;
+        padding: 30px;
+        margin-bottom: 30px;
+    }
+
+    .sgr-tarjeta {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        height: 100%;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .sgr-tarjeta:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
+    }
+
+    .sgr-icono {
+        width: 50px;
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 12px;
+        background-color: #f7e9ed;
+        color: #800020;
+        font-size: 24px;
+        margin-bottom: 18px;
+    }
+
+    .sgr-titulo-modulo {
+        color: #242424;
+        font-weight: 700;
+        font-size: 19px;
+    }
+
+    .sgr-descripcion {
+        color: #6c757d;
+        font-size: 14px;
+        min-height: 42px;
+    }
+
+    .btn-sgr {
+        background-color: #800020;
+        border-color: #800020;
+        color: white;
+    }
+
+    .btn-sgr:hover {
+        background-color: #650019;
+        border-color: #650019;
+        color: white;
+    }
+
+    .sgr-seccion {
+        border-left: 4px solid #800020;
+        padding-left: 12px;
+        margin-bottom: 24px;
+    }
+</style>
 {% endblock %}
 
 
 {% block content %}
 
-<section class="mb-5">
+<div class="container py-4">
 
-    <div class="p-5 bg-white rounded shadow-sm">
+    <!-- BIENVENIDA -->
+    <section class="sgr-bienvenida">
 
-        <span class="badge bg-secondary mb-3">
-            Delegaciones Municipales
-        </span>
+        <h2 class="fw-bold mb-2">
+            <i class="bi bi-speedometer2 me-2"></i>
+            Panel de Control SGR
+        </h2>
 
-        <h1 class="titulo-principal">
-            Sistema de Gestión de Resultados
-        </h1>
-
-        <p class="lead mt-3">
-            Plataforma para apoyar el registro, seguimiento
-            y consulta de la gestión realizada por los
-            funcionarios de las Delegaciones Municipales.
+        <p class="mb-2">
+            Bienvenido,
+            <strong>{{ request.user.username }}</strong>
         </p>
 
-        <div class="mt-4">
+        <div class="mb-0">
 
-            <a href="{% url 'inicio_funcionarios' %}"
-               class="btn btn-municipal me-2">
-                Funcionarios
-            </a>
+            {% if request.user.is_superuser %}
 
-            <a href="{% url 'inicio_actividades' %}"
-               class="btn btn-outline-secondary">
-                Actividades
-            </a>
+                <span class="badge bg-light text-dark">
+                    Administrador del sistema
+                </span>
+
+            {% else %}
+
+                {% for grupo in request.user.groups.all %}
+
+                    <span class="badge bg-light text-dark me-1">
+                        {{ grupo.name }}
+                    </span>
+
+                {% empty %}
+
+                    <span class="badge bg-warning text-dark">
+                        Sin rol asignado
+                    </span>
+
+                {% endfor %}
+
+            {% endif %}
 
         </div>
 
+        <p class="mt-3 mb-0">
+            Sistema de Gestión de Resultados
+            de las Delegaciones Municipales de La Serena.
+        </p>
+
+    </section>
+
+
+    <!-- MÓDULOS -->
+    <div class="sgr-seccion">
+
+        <h3 class="fw-bold mb-1">
+            Módulos del sistema
+        </h3>
+
+        <p class="text-muted mb-0">
+            Selecciona una opción según los permisos de tu perfil.
+        </p>
+
     </div>
 
-</section>
-
-
-<section>
-
-    <h2 class="mb-4">
-        Módulos del sistema
-    </h2>
 
     <div class="row g-4">
 
-        <div class="col-md-6">
+        <!-- FUNCIONARIOS -->
+        {% if request.user.is_superuser or perms.app_funcionarios.view_funcionario %}
 
-            <div class="card h-100 shadow-sm">
+        <div class="col-md-6 col-lg-4">
 
-                <div class="card-body">
+            <div class="sgr-tarjeta p-4">
 
-                    <h3 class="card-title h5">
-                        Funcionarios
-                    </h3>
+                <div class="sgr-icono">
+                    <i class="bi bi-person-badge"></i>
+                </div>
 
-                    <p class="card-text">
-                        Consulta información de los funcionarios
-                        asociados a las Delegaciones Municipales.
-                    </p>
+                <h5 class="sgr-titulo-modulo">
+                    Funcionarios
+                </h5>
+
+                <p class="sgr-descripcion">
+                    Consulta y administración de los
+                    funcionarios registrados.
+                </p>
+
+                <div class="d-flex flex-wrap gap-2 mt-3">
 
                     <a href="{% url 'listar_funcionarios' %}"
-                       class="btn btn-municipal">
+                       class="btn btn-sgr btn-sm">
                         Ver funcionarios
                     </a>
 
+                    {% if request.user.is_superuser or perms.app_funcionarios.add_funcionario %}
+
+                    <a href="{% url 'crear_funcionario' %}"
+                       class="btn btn-outline-secondary btn-sm">
+                        + Nuevo
+                    </a>
+
+                    {% endif %}
+
                 </div>
 
             </div>
 
         </div>
 
+        {% endif %}
 
-        <div class="col-md-6">
 
-            <div class="card h-100 shadow-sm">
+        <!-- ACTIVIDADES -->
+        {% if request.user.is_superuser or perms.app_actividades.view_actividad %}
 
-                <div class="card-body">
+        <div class="col-md-6 col-lg-4">
 
-                    <h3 class="card-title h5">
-                        Actividades
-                    </h3>
+            <div class="sgr-tarjeta p-4">
 
-                    <p class="card-text">
-                        Revisa las actividades registradas
-                        y su estado de validación.
-                    </p>
+                <div class="sgr-icono">
+                    <i class="bi bi-clipboard-check"></i>
+                </div>
+
+                <h5 class="sgr-titulo-modulo">
+                    Actividades
+                </h5>
+
+                <p class="sgr-descripcion">
+                    Registro y seguimiento de
+                    actividades municipales.
+                </p>
+
+                <div class="d-flex flex-wrap gap-2 mt-3">
 
                     <a href="{% url 'listar_actividades' %}"
-                       class="btn btn-municipal">
+                       class="btn btn-sgr btn-sm">
                         Ver actividades
+                    </a>
+
+                    {% if request.user.is_superuser or perms.app_actividades.add_actividad %}
+
+                    <a href="{% url 'crear_actividad' %}"
+                       class="btn btn-outline-secondary btn-sm">
+                        + Nueva
+                    </a>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- DELEGACIONES -->
+        {% if request.user.is_superuser or perms.app_delegaciones.view_delegacion %}
+
+        <div class="col-md-6 col-lg-4">
+
+            <div class="sgr-tarjeta p-4">
+
+                <div class="sgr-icono">
+                    <i class="bi bi-buildings"></i>
+                </div>
+
+                <h5 class="sgr-titulo-modulo">
+                    Delegaciones
+                </h5>
+
+                <p class="sgr-descripcion">
+                    Administración de las
+                    delegaciones municipales.
+                </p>
+
+                <div class="d-flex flex-wrap gap-2 mt-3">
+
+                    <a href="{% url 'listar_delegaciones' %}"
+                       class="btn btn-sgr btn-sm">
+                        Ver delegaciones
+                    </a>
+
+                    {% if request.user.is_superuser or perms.app_delegaciones.add_delegacion %}
+
+                    <a href="{% url 'crear_delegacion' %}"
+                       class="btn btn-outline-secondary btn-sm">
+                        + Nueva
+                    </a>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- CARGOS -->
+        {% if request.user.is_superuser or perms.app_cargos.view_cargo %}
+
+        <div class="col-md-6 col-lg-4">
+
+            <div class="sgr-tarjeta p-4">
+
+                <div class="sgr-icono">
+                    <i class="bi bi-briefcase"></i>
+                </div>
+
+                <h5 class="sgr-titulo-modulo">
+                    Cargos
+                </h5>
+
+                <p class="sgr-descripcion">
+                    Mantenedor de cargos y
+                    funciones institucionales.
+                </p>
+
+                <div class="d-flex flex-wrap gap-2 mt-3">
+
+                    <a href="{% url 'listar_cargos' %}"
+                       class="btn btn-sgr btn-sm">
+                        Ver cargos
+                    </a>
+
+                    {% if request.user.is_superuser or perms.app_cargos.add_cargo %}
+
+                    <a href="{% url 'crear_cargo' %}"
+                       class="btn btn-outline-secondary btn-sm">
+                        + Nuevo
+                    </a>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- SEGUIMIENTOS -->
+        {% if request.user.is_superuser or perms.app_seguimientos.view_seguimiento %}
+
+        <div class="col-md-6 col-lg-4">
+
+            <div class="sgr-tarjeta p-4">
+
+                <div class="sgr-icono">
+                    <i class="bi bi-list-check"></i>
+                </div>
+
+                <h5 class="sgr-titulo-modulo">
+                    Seguimientos
+                </h5>
+
+                <p class="sgr-descripcion">
+                    Control de seguimientos
+                    asociados a actividades y funcionarios.
+                </p>
+
+                <div class="d-flex flex-wrap gap-2 mt-3">
+
+                    <a href="{% url 'listar_seguimientos' %}"
+                       class="btn btn-sgr btn-sm">
+                        Ver seguimientos
+                    </a>
+
+                    {% if request.user.is_superuser or perms.app_seguimientos.add_seguimiento %}
+
+                    <a href="{% url 'crear_seguimiento' %}"
+                       class="btn btn-outline-secondary btn-sm">
+                        + Nuevo
+                    </a>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- GESTIÓN DE USUARIOS -->
+        <!-- SOLO ADMINISTRADOR -->
+
+        {% if request.user.is_superuser %}
+
+        <div class="col-md-6 col-lg-4">
+
+            <div class="sgr-tarjeta p-4">
+
+                <div class="sgr-icono">
+                    <i class="bi bi-people-fill"></i>
+                </div>
+
+                <h5 class="sgr-titulo-modulo">
+                    Gestión de Usuarios
+                </h5>
+
+                <p class="sgr-descripcion">
+                    Registrar, editar, activar y
+                    desactivar usuarios del sistema.
+                </p>
+
+                <div class="d-flex flex-wrap gap-2 mt-3">
+
+                    <a href="{% url 'listar_usuarios' %}"
+                       class="btn btn-sgr btn-sm">
+                        Ver usuarios
+                    </a>
+
+                    <a href="{% url 'crear_usuario' %}"
+                       class="btn btn-outline-secondary btn-sm">
+                        + Nuevo
                     </a>
 
                 </div>
@@ -105,8 +408,67 @@ SGR | Inicio
 
         </div>
 
+        {% else %}
+
+            {% for grupo in request.user.groups.all %}
+
+                {% if grupo.name == 'Administrador' %}
+
+                <div class="col-md-6 col-lg-4">
+
+                    <div class="sgr-tarjeta p-4">
+
+                        <div class="sgr-icono">
+                            <i class="bi bi-people-fill"></i>
+                        </div>
+
+                        <h5 class="sgr-titulo-modulo">
+                            Gestión de Usuarios
+                        </h5>
+
+                        <p class="sgr-descripcion">
+                            Registrar, editar, activar y
+                            desactivar usuarios del sistema.
+                        </p>
+
+                        <div class="d-flex flex-wrap gap-2 mt-3">
+
+                            <a href="{% url 'listar_usuarios' %}"
+                               class="btn btn-sgr btn-sm">
+                                Ver usuarios
+                            </a>
+
+                            <a href="{% url 'crear_usuario' %}"
+                               class="btn btn-outline-secondary btn-sm">
+                                + Nuevo
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+            {% endfor %}
+
+        {% endif %}
+
     </div>
 
-</section>
+
+    <!-- INFORMACIÓN -->
+    <div class="alert alert-light border mt-4">
+
+        <i class="bi bi-shield-check me-2"
+           style="color: #800020;"></i>
+
+        Las funcionalidades disponibles dependen
+        de los permisos asociados a tu usuario.
+
+    </div>
+
+</div>
 
 {% endblock %}
