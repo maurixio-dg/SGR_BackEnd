@@ -1,66 +1,288 @@
+
 # SGR - Sistema de Gestión de Registros
 
-Proyecto desarrollado con Django Framework como evolución de la aplicación realizada en la Evaluación Sumativa N°1.
+Proyecto desarrollado con Django Framework para el ramo de Programación Back-End de INACAP.
 
-## Descripción
+El sistema ha evolucionado durante las evaluaciones del ramo, incorporando una base de datos relacional, operaciones CRUD, autenticación, gestión de usuarios, perfiles de acceso y recuperación de contraseñas mediante correo electrónico.
 
-El sistema permite gestionar y visualizar información relacionada con funcionarios y actividades de Delegaciones Municipales.
+## 1. Descripción del proyecto
 
-La información es almacenada en una base de datos relacional y administrada mediante Django Admin.
+El Sistema de Gestión de Registros (SGR) permite administrar información relacionada con funcionarios, actividades y delegaciones municipales.
 
-## Tecnologías utilizadas
+La aplicación utiliza Django como framework de desarrollo y MySQL como sistema de gestión de base de datos. Cuenta con una interfaz web que permite consultar y administrar registros de acuerdo con los permisos de cada usuario.
+
+## 2. Tecnologías utilizadas
 
 - Python
-- Django
-- MySQL / MariaDB
+- Django 6.1.1
+- MySQL
 - Django ORM
+- HTML y CSS
 - Bootstrap
-- HTML
-- CSS
-- Git
-- GitHub
+- JavaScript
+- Git y GitHub
+- Gmail SMTP
+- AWS EC2 (despliegue)
 
-## Aplicaciones Django
+## 3. Evolución del proyecto
 
-El proyecto está compuesto por dos aplicaciones principales:
+### Evaluación 1
+
+Se desarrolló la estructura inicial del sistema, trabajando con registros de funcionarios y actividades.
+
+### Evaluación 2
+
+Se incorporó una base de datos relacional MySQL, utilizando modelos y migraciones de Django.
+
+También se implementó la administración de registros mediante Django Admin y se trabajó con control de versiones y despliegue en AWS EC2.
+
+### Evaluación 3
+
+Se amplió el sistema incorporando nuevos módulos y funcionalidades:
+
+- CRUD de funcionarios.
+- CRUD de actividades.
+- CRUD de cargos.
+- CRUD de delegaciones.
+- CRUD de seguimientos.
+- Administración de usuarios.
+- Autenticación mediante inicio y cierre de sesión.
+- Asignación de perfiles y permisos.
+- Restricciones de acceso a vistas y operaciones.
+- Recuperación de contraseñas mediante Gmail SMTP.
+- Validación de enlaces de recuperación con tokens de Django.
+
+## 4. Aplicaciones Django
+
+El proyecto está organizado en las siguientes aplicaciones:
 
 ### app_funcionarios
 
-Permite administrar y visualizar los funcionarios registrados en el sistema.
+Permite crear, consultar, modificar y eliminar registros de funcionarios.
 
 ### app_actividades
 
-Permite administrar y visualizar las actividades asociadas a los funcionarios.
+Permite administrar actividades asociadas a funcionarios, incluyendo información sobre fechas, estados y evidencias.
 
-Existe una relación entre ambas entidades mediante una ForeignKey desde Actividad hacia Funcionario.
+Cada actividad se relaciona con un funcionario mediante una clave foránea.
 
-## Base de datos
+### app_cargos
 
-La aplicación utiliza una base de datos relacional MySQL/MariaDB.
+Permite administrar el catálogo de cargos utilizados por el sistema.
 
-Los datos que anteriormente estaban almacenados en archivos JSON fueron migrados hacia la base de datos utilizando modelos y migraciones de Django.
+### app_delegaciones
 
-## Django Admin
+Permite registrar y administrar delegaciones, incluyendo sus datos de identificación y estado.
 
-Las entidades Funcionario y Actividad se encuentran registradas en Django Admin.
+### app_seguimientos
 
-Desde el panel de administración es posible:
+Permite registrar seguimientos asociados a actividades y funcionarios.
 
-- Crear registros.
-- Visualizar registros.
-- Modificar registros.
-- Eliminar registros.
-- Buscar registros.
+Incluye validaciones y operaciones transaccionales para mantener la integridad de la información.
 
-## Variables de entorno
+### app_usuarios
 
-Las configuraciones sensibles de la base de datos son administradas mediante variables de entorno utilizando un archivo `.env`.
+Permite administrar cuentas de usuario, asignar perfiles, modificar datos y controlar su estado.
 
-El archivo `.env` no se incluye en el repositorio por razones de seguridad.
+También incorpora el proceso de recuperación de contraseñas utilizando las vistas de autenticación de Django.
 
-## Instalación
+## 5. Base de datos
 
-Clonar el repositorio:
+El sistema utiliza MySQL y Django ORM.
+
+Las principales entidades de gestión son:
+
+- Funcionario.
+- Actividad.
+- Cargo.
+- Delegación.
+- Seguimiento.
+
+Además, utiliza las tablas de autenticación y permisos proporcionadas por Django.
+
+### Relaciones entre entidades
+
+- Una actividad se encuentra asociada a un funcionario.
+- Un seguimiento se relaciona con una actividad.
+- Un seguimiento también se relaciona con un funcionario.
+
+La base de datos utiliza claves foráneas para mantener la integridad referencial.
+
+Se utilizan transacciones en operaciones que requieren actualizar registros relacionados.
+
+## 6. Autenticación y perfiles
+
+El sistema cuenta con tres perfiles principales:
+
+### Administrador
+
+Puede gestionar usuarios y realizar operaciones de administración sobre los módulos del sistema.
+
+### Supervisor
+
+Puede consultar y modificar registros de los módulos autorizados, además de crear actividades y seguimientos.
+
+No tiene permisos para administrar usuarios ni eliminar registros.
+
+### Administrativo
+
+Dispone de acceso de consulta a los módulos autorizados.
+
+No puede crear, modificar ni eliminar registros.
+
+Las restricciones se aplican tanto en la interfaz como en las vistas del servidor.
+
+## 7. Recuperación de contraseñas
+
+El sistema incluye recuperación de contraseñas mediante correo electrónico.
+
+El proceso funciona de la siguiente manera:
+
+1. El usuario solicita recuperar su contraseña.
+2. Django genera un enlace de recuperación con un token de seguridad.
+3. El sistema envía el enlace mediante Gmail SMTP.
+4. El usuario recibe el mensaje y accede al enlace.
+5. Django valida el token recibido.
+6. El usuario establece una nueva contraseña.
+7. Puede iniciar sesión utilizando la contraseña actualizada.
+
+Esta funcionalidad fue comprobada mediante una prueba de envío y recepción real de correo electrónico.
+
+## 8. Seguridad
+
+El proyecto incorpora medidas de seguridad como:
+
+- Autenticación de usuarios mediante Django.
+- Contraseñas almacenadas mediante los mecanismos de hash de Django.
+- Roles y permisos diferenciados.
+- Restricciones de acceso a operaciones no autorizadas.
+- Protección CSRF en formularios.
+- Validación de datos mediante formularios de Django.
+- Claves foráneas e integridad referencial.
+- Uso de variables de entorno para configuraciones sensibles.
+- Recuperación de contraseñas con tokens de seguridad.
+
+El archivo `.env` se mantiene excluido del repositorio mediante `.gitignore`.
+
+## 9. Instalación local
+
+### Clonar el repositorio
 
 ```bash
 git clone https://github.com/maurixio-dg/SGR_BackEnd.git
+cd SGR_BackEnd
+```
+
+### Crear y activar el entorno virtual
+
+En Windows:
+
+```powershell
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+```
+
+### Instalar dependencias
+
+```powershell
+pip install -r requirements.txt
+```
+
+### Configurar la base de datos
+
+Crear una base de datos MySQL y configurar sus datos de conexión mediante el archivo `.env`.
+
+### Configurar variables de entorno
+
+Crear un archivo `.env` en la raíz del proyecto.
+
+Ejemplo de variables necesarias:
+
+```dotenv
+DJANGO_SECRET_KEY=CLAVE_SECRETA_GENERADA_LOCALMENTE
+DJANGO_DEBUG=True
+DJANGO_ALLOWED_HOSTS=127.0.0.1,localhost
+
+DB_NAME=sgr_db
+DB_USER=USUARIO_MYSQL
+DB_PASSWORD=CONTRASENA_MYSQL
+DB_HOST=127.0.0.1
+DB_PORT=3306
+
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=CORREO_GMAIL
+SMTP_APP_PASSWORD=CONTRASENA_DE_APLICACION
+SMTP_USE_TLS=True
+```
+
+Los valores anteriores son ejemplos. Cada instalación debe utilizar sus propias credenciales.
+
+No publicar el archivo `.env` en GitHub.
+
+### Aplicar migraciones
+
+```powershell
+python manage.py migrate
+```
+
+### Crear un superusuario
+
+```powershell
+python manage.py createsuperuser
+```
+
+Los grupos Administrador, Supervisor y Administrativo deben configurarse con sus respectivos permisos en cada base de datos.
+
+### Iniciar el servidor
+
+```powershell
+python manage.py runserver
+```
+
+Abrir en el navegador:
+
+http://127.0.0.1:8000/
+
+## 10. Pruebas realizadas
+
+Durante el desarrollo de la Evaluación 3 se realizaron pruebas funcionales de:
+
+- Creación, consulta, modificación y eliminación de registros.
+- Relaciones entre funcionarios, actividades y seguimientos.
+- Gestión de usuarios y asignación de perfiles.
+- Restricción de acceso al módulo de usuarios.
+- Bloqueo de creación y modificación de actividades para Administrativo.
+- Bloqueo de eliminación de funcionarios para Supervisor.
+- Envío de correos mediante Gmail SMTP.
+- Recuperación y modificación de contraseñas.
+- Inicio de sesión con la nueva contraseña.
+- Comprobación de migraciones y configuración de Django.
+
+## 11. Control de versiones
+
+El código fuente se administra mediante Git y GitHub.
+
+Repositorio:
+
+https://github.com/maurixio-dg/SGR_BackEnd
+
+La rama principal `main` reúne el desarrollo de las evaluaciones del ramo de Programación Back-End.
+
+## 12. Despliegue
+
+El proyecto contempla su despliegue en AWS EC2.
+
+Para un entorno de producción es necesario configurar adecuadamente las variables de entorno, los hosts permitidos, los archivos estáticos, la conexión a la base de datos y el servicio de correo electrónico.
+
+Las pruebas locales no reemplazan la validación funcional del sistema una vez desplegado.
+
+## 13. Autor
+
+Proyecto académico desarrollado por Mauricio Díaz González.
+
+Carrera: Analista Programador.
+
+Institución: INACAP.
+
+Asignatura: Programación Back-End.
