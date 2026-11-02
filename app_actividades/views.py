@@ -6,6 +6,7 @@ from django.shortcuts import (
 )
 
 from django.db.models import Q
+from django.db.models.deletion import ProtectedError
 from django.contrib import messages
 
 from django.contrib.auth.decorators import (
@@ -166,12 +167,22 @@ def eliminar_actividad(request, pk):
 
     if request.method == 'POST':
 
-        actividad.delete()
+        try:
+            actividad.delete()
 
-        messages.success(
-            request,
-            'Actividad eliminada correctamente.'
-        )
+            messages.success(
+                request,
+                'Actividad eliminada correctamente.'
+            )
+
+        except ProtectedError:
+
+            messages.error(
+                request,
+                'No se puede eliminar la actividad porque '
+                'tiene seguimientos asociados. '
+                'Primero debes resolver esos registros relacionados.'
+            )
 
         return redirect('listar_actividades')
 
