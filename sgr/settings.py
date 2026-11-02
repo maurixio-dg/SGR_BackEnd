@@ -211,3 +211,24 @@ MAILERS = {
 
 # Remitente de los correos del SGR
 DEFAULT_FROM_EMAIL = os.getenv('SMTP_USER', '')
+
+
+
+# ==========================================
+# SEGURIDAD HTTPS - PRODUCCION AWS
+# ==========================================
+
+if not DEBUG:
+
+    # Apache informa a Django que la conexion original usa HTTPS.
+    SECURE_PROXY_SSL_HEADER = (
+        'HTTP_X_FORWARDED_PROTO',
+        'https',
+    )
+
+    # Obligar a utilizar HTTPS.
+    SECURE_SSL_REDIRECT = True
+
+    # Proteger las cookies de autenticacion y formularios.
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
